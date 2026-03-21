@@ -34,7 +34,7 @@ P_origin_x > 0 $ /* It's on the x-positive side in the plane. */
 
 /* The plane normal of p*/
 
-p_normal = [1/sqrt(2), 0, -1/sqrt(2)] $
+p_normal: [1/sqrt(2), 0, -1/sqrt(2)] $
 
 /* A definition of a plane */
 
