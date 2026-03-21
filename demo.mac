@@ -6,6 +6,8 @@
 
 /*debugmode(true);*/
 
+myrules: []$
+
 /* The goal is to recreate Figure 2.2.4 from the book "Genius of Gaudi":
    - Alsina, Claudi, and Roger B. Nelsen. The Genius of Gaudí: Geometry and Architecture. Vol. 106. American Mathematical Society, 2025.
 */
@@ -45,6 +47,10 @@ is_on_plane( /*point*/ X, /*reference point*/ Q, /*normal*/ normal) :=
       v[1] * normal[1] + v[2] * normal[2] + v[3] * normal[3] = 0 /* has no component towards the normal direction */
    )$
 
+/* Euclidean distance */
+
+dist(A, B) := sqrt( (A[1]-B[1])^2 + (A[2]-B[2])^2 + (A[3]-B[3])^2 )$
+
 /* Point X on the plane p means this: */
 is_on_p(X) := is_on_plane(X, F, p_normal);
 
@@ -52,13 +58,56 @@ is_on_p(X) := is_on_plane(X, F, p_normal);
 sphere_center: [0, 0, cz];
 sphere_radius$ /* No condition set for now. */
 
-/* Point F: the focal point of the parabola curve. */
+/* Point E on the sphere touches the cone. */
+E: [E_x, E_y, E_z]$
 
-F: [F_x, F_y, F_z] $
+   /* For simplicity, we set its x-coordinate to 0. This is not necessary.*/
+   E_x: 0$
+   E_y < 0$ /* We need only one of the possible Es.*/
+   
+   /* The above simplicity gives us a simple way to constrain E on the surface of the corn. */
+   E_z: E_y$
 
-F_y: 0 $ /* F is on the x-z plane. */
 
-is_on_p(F) $ /* F is on plane p*/
+/* Using that E is on the sphere, we can determine the sphere radius. */
+sphere_radius: dist(E, sphere_center)$
 
-/* The horizontal plane p' in the book, but ' cannot be used in maxima */
-/* p_z = */
+/* The sphere above decides the position of the plane p.*/
+
+disp(sphere_center);
+disp(sphere_radius);
+disp(c_z);
+
+solve(
+   [dist(sphere_center, [0, 0, 0]) = 1],
+   [cz]
+);
+solve(
+   [dist(sphere_center, [0, 0, 0]) = 1,
+    cz < 0
+   ],
+   [cz]
+);
+
+solve(
+   [E_z = -1,
+    dist(E, [0,0,0]) / dist(sphere_center, [0, 0, 0]) = cos( %pi / 4)
+   ], 
+   [E_y, cz]
+);
+
+/*
+   /* Point F: the focal point of the parabola curve. */
+
+   F: [F_x, F_y, F_z] $
+
+   F_y: 0 $ /* F is on the x-z plane. */
+
+   is_on_p(F) $ /* F is on plane p*/
+
+   /* F is on the sphere */
+   dist(F, sphere_center) = sphere_radius
+
+   /* The horizontal plane p' in the book, but ' cannot be used in maxima */
+   /* p_z = */
+*/
