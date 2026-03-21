@@ -1,1 +1,5 @@
-A minimalist template for DevContainer configuration.
+A demo for Maxima in DevContainer.
+
+```
+maxima -b demo.mac
+```
